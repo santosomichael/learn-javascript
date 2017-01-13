@@ -1,0 +1,257 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type"  name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"/>
+	<title>HOPES</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+	<style type="text/css">
+		.col-xs-12 {
+			margin-bottom:25px; 
+		}
+		#input {
+			text-align: right;
+			font-family: montserrat;
+			font-size: 40px;
+		}
+	</style>
+</head>
+<body class="container">
+		<div class="row">
+			<div class="col-sm-offset-4 col-sm-4 col-xs-offset-2 col-xs-8" style="background:black;">
+				<h2 style='font-family:Montserrat; color:white;' class='text-center'>Wow Calculator</h2>
+				<div class="row">
+					<div class="col-xs-12">
+						<input id="input" disabled="disabled" type="text" class='form-control' value="0" />
+					</div>          
+					<div class="col-xs-12">
+						<div class="row">
+							<div class="col-xs-3">
+								<button class='btn btn-block btn-danger' onclick="buttonClick('AC')">AC</button>
+							</div>
+							<div class="col-xs-3">
+								<button id="asd" class='btn btn-block btn-danger'>CE</button>
+							</div>
+							<div class="col-xs-3">
+								<button class='btn btn-block btn-default'>%</button>
+							</div>
+							<div class="col-xs-3">
+								<button class='btn btn-block btn-default'>/</button>
+							</div>  
+						</div>            
+					</div>
+					
+					<div class="col-xs-12">
+						<div class="row">
+							<div class="col-xs-3">
+								<button class='btn btn-block btn-default'>7</button>
+							</div>
+							<div class="col-xs-3">
+								<button class='btn btn-block btn-default'>8</button>
+							</div>
+							<div class="col-xs-3">
+								<button class='btn btn-block btn-default'>9</button>
+							</div>
+							<div class="col-xs-3">
+								<button class='btn btn-block btn-default'>X</button>
+							</div>  
+						</div>            
+					</div>
+
+					<div class="col-xs-12">
+						<div class="row">
+							<div class="col-xs-3">
+								<button class='btn btn-block btn-default'>4</button>
+							</div>
+							<div class="col-xs-3">
+								<button class='btn btn-block btn-default'>5</button>
+							</div>
+							<div class="col-xs-3">
+								<button class='btn btn-block btn-default'>6</button>
+							</div>
+							<div class="col-xs-3">
+								<button class='btn btn-block btn-default'>-</button>
+							</div>  
+						</div>            
+					</div>
+
+					<div class="col-xs-12">
+						<div class="row">
+							<div class="col-xs-3">
+								<button class='btn btn-block btn-default'>1</button>
+							</div>
+							<div class="col-xs-3">
+								<button class='btn btn-block btn-default'>2</button>
+							</div>
+							<div class="col-xs-3">
+								<button class='btn btn-block btn-default'>3</button>
+							</div>
+							<div class="col-xs-3">
+								<button class='btn btn-block btn-default'>+</button>
+							</div>  
+						</div>            
+					</div>
+
+					<div class="col-xs-12">
+						<div class="row">
+							<div class="col-xs-3">
+								<button class='btn btn-block btn-default'>0</button>
+							</div>
+							<div class="col-xs-3">
+								<button class='btn btn-block btn-default'>.</button>
+							</div>
+							<div class="col-xs-3">
+								<button class='btn btn-block btn-default'>=</button>
+							</div>
+							<div class="col-xs-3">
+								<button class='btn btn-block btn-default'>W</button>
+							</div>  
+						</div>            
+					</div>
+
+				</div>
+			</div>
+		</div>  
+	</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+
+	var flagOperation = false;
+   var boolFirstInput = true;
+   var boolComa = false;
+   var lastInput = 0;
+   var lastOperation = 0;
+	var tempValue = 0;
+   var inputNow = 0;
+	
+   function assign(string) {
+      $("#input").val(string);
+   }
+
+   function operation(string) {
+      if (flagOperation) {
+         switch(lastOperation) {
+         case "+":
+            tempValue = parseFloat(tempValue) + parseFloat(lastInput);
+            break;
+         case "-":
+            tempValue = parseFloat(tempValue) - parseFloat(lastInput);
+            break;
+         case "/":
+            tempValue = parseFloat(tempValue) / parseFloat(lastInput);
+            break;
+         case "X":
+            tempValue = parseFloat(tempValue) * parseFloat(lastInput);
+            break;
+         case "%":            
+            tempValue = parseFloat(tempValue) % parseFloat(lastInput);
+            break;
+         }
+         assign(tempValue);         
+         boolFirstInput = true;
+         lastOperation = string;
+         lastInput = text;
+      }
+      flagOperation = true;
+      boolFirstInput = true;
+      tempValue = inputNow;
+      lastOperation = string;
+   }
+
+	$("button").click(function() {
+		var text = $(this).text();
+		inputNow = $("#input").val();
+
+		switch(text) {
+         case "AC":
+            assign("0");
+            flagOperation = false;
+            boolFirstInput = true;
+            tempValue = 0;
+            lastOperation = "";
+            break;
+         case "CE":
+            assign(inputNow.substr(0,inputNow.length-1));
+            break;
+         case "W":
+            alert("So Much Wow!!!");
+            break;
+         case "+":
+            operation("+");
+            break;
+         case "-":
+            operation("-");            
+            break;
+         case "/":
+            operation("/");            
+            break;
+         case "X":
+            operation("X");            
+            break;
+         case "%":            
+            operation("%");            
+            break;
+         case "=":
+            if (!flagOperation) {
+               switch(lastOperation) {
+                  case "+":
+                     tempValue += parseFloat(lastInput);
+                     break;
+                  case "X":
+                     tempValue *= parseFloat(lastInput);
+                     break;
+                  case "-":
+                     tempValue -= parseFloat(lastInput);
+                     break;
+                  case "/":
+                     tempValue /= parseFloat(lastInput);
+                     break;
+                  case "%":
+                     tempValue %= parseFloat(lastInput);
+                     break;
+               }
+            }
+            else {
+               switch(lastOperation) {
+                  case "+":
+                     tempValue = parseFloat(tempValue) + parseFloat(inputNow);
+                     break;
+                  case "X":
+                     tempValue = parseFloat(tempValue) * parseFloat(inputNow);
+                     break;
+                  case "-":
+                     tempValue = parseFloat(tempValue) - parseFloat(inputNow);
+                     break;
+                  case "/":
+                     tempValue = parseFloat(tempValue) / parseFloat(inputNow);
+                     break;
+                  case "%":
+                     tempValue = parseFloat(tempValue) % parseFloat(inputNow);
+                     break;
+               }
+            }
+            flagOperation = false;
+            boolFirstInput = true;
+            assign(tempValue);
+            break;   
+            
+         default:
+            if (flagOperation && boolFirstInput) {
+               assign(text);
+               boolFirstInput = false;
+            }
+            else if (inputNow.length < 10) {
+               assign(inputNow + "" + text);
+               if(boolFirstInput)
+                  assign(text);
+               boolFirstInput = false;
+            }
+            lastInput = text;
+		} 
+      console.log(lastInput);
+	});
+</script>
+</html>
