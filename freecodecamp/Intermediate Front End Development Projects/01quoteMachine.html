@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"  name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"/>
+  <title>HOPES</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
+  <link href="http://fonts.googleapis.com/css?family=Opensans:400,700" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    body {
+      font-family: 'Pacifico', cursive;
+      transition: 2s all;
+    }
+    .caption {
+      font-family: 'Open Sans', sans-serif;
+    }
+    p {
+      font-size: 24px;
+    }
+
+    .btn:hover {
+      background-color: white;
+    }
+    .btn:active {
+      border-color: rgba(0,0,0,0);
+      outline-style: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row text-center">
+      <div class='col-sm-12'>
+        <h2 class='heading' style="height:40px; color: white; background-color: black">Wow quote machine</h2>
+      </div>
+      <div class="col-sm-offset-4 col-sm-4">
+        <p>"
+          <span class="caption"> These are magnifico quote's, may those quotes enlight  your world</span>
+        "</p>
+      </div>
+      <div class='col-sm-12'>
+        <button class='btn btn-default'>GET QUOTE</button>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+  var counter = 0;
+  var color = [["#468966", "#FFF0A5", "#FFB03B", "#B64926"], ["#225378", "#1695A3", "#105B63", "#F3FFE2"], ["#FF6138", "#FFFF9D", "#BEEB9F", "#79BD8F"], ["#2C3E50", "#E74C3C", "#ECF0F1", "#3498DB", "#2980B9"], ["#105B63", "#FFFAD5", "#FFD34E", "#DB9E36"]];    
+
+    function change() {
+      $(".heading").css("background-color", color[counter][0]);
+      $(".btn").css("background-color", color[counter][0]);
+      $(".heading").css("color", color[counter][1]);
+      $("p").css("color", color[counter][2]);
+      $(".btn").css("color", color[counter][1]);
+      $("body").css("background-color", color[counter][3]);
+    };
+    // Random Quote Generator
+    var url = "http://api.forismatic.com/api/1.0/?method=getQuote&key=457653&format=jsonp&lang=en&jsonp=?";
+    
+    var getQuote = function(data) {
+      $(".caption").fadeOut();
+      change();
+      $(".caption").text(data.quoteText);
+      $(".caption").fadeIn();
+      
+      counter++;
+      if (counter == 5) {
+        counter = 0;
+      }
+      
+      $(".caption").text(data.quoteText);
+      $(".caption").fadeIn();      
+    };
+    
+    $("button").click(function() {
+      $(".caption").fadeOut();
+      $.getJSON(url, getQuote, 'jsonp');
+      
+    });
+
+    
+</script>
+</html>

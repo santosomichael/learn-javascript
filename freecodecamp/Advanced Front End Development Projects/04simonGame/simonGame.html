@@ -10,6 +10,7 @@
 </head>
 <body class="container">
       <div class="row">
+        <h2>Level <span id="level">1</span></h2>        
         <div class="col-sm-12"><button class='btn btn-warning'>Start</button></div>
         <div class="col-sm-6"><button class='btn btn-default'>Sound 1</button></div>
         <div class="col-sm-6"><button class='btn btn-default'>Sound 2</button></div>
@@ -25,7 +26,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script>  
     var audio;
-
+    var question = [];
     function getRandom() {
       return Math.ceil(Math.random()*4);
     };
@@ -48,10 +49,12 @@
     };
 
     $(".btn").on("click", function() {
+      // $("#level").text("");
       var input = $(this).text();
       if (input == "Start") {
         var random = getRandom();
         getRadio(random);
+        question.push(random);
       }
       else if (input == "Sound 1") {
         getRadio(1);
@@ -65,8 +68,6 @@
       else if (input == "Sound 4") {
         getRadio(4);
       }
-
-      
     });
     // audio.play();
     //           }
