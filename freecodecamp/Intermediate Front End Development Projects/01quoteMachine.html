@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
   <link href="http://fonts.googleapis.com/css?family=Opensans:400,700" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <style type="text/css">
     body {
       font-family: 'Pacifico', cursive;
@@ -39,7 +40,12 @@
         "</p>
       </div>
       <div class='col-sm-12'>
-        <button class='btn btn-default'>GET QUOTE</button>
+          <a class='twitter-tweet' href="https://twitter.com/intent/tweet?text=mama yukeroks">
+              <button id = "twitter" class="twitter-share-button btn btn-default fa fa-twitter">
+              </button>
+            </a>
+        
+        <button id = "getQuote" class='btn btn-default'>GET QUOTE</button>
       </div>
     </div>
   </div>
@@ -51,12 +57,15 @@
   var color = [["#468966", "#FFF0A5", "#FFB03B", "#B64926"], ["#225378", "#1695A3", "#105B63", "#F3FFE2"], ["#FF6138", "#FFFF9D", "#BEEB9F", "#79BD8F"], ["#2C3E50", "#E74C3C", "#ECF0F1", "#3498DB", "#2980B9"], ["#105B63", "#FFFAD5", "#FFD34E", "#DB9E36"]];    
 
     function change() {
+      
       $(".heading").css("background-color", color[counter][0]);
       $(".btn").css("background-color", color[counter][0]);
       $(".heading").css("color", color[counter][1]);
       $("p").css("color", color[counter][2]);
       $(".btn").css("color", color[counter][1]);
+      $(".fa").css("color", color[counter][1]);
       $("body").css("background-color", color[counter][3]);
+      
     };
     // Random Quote Generator
     var url = "http://api.forismatic.com/api/1.0/?method=getQuote&key=457653&format=jsonp&lang=en&jsonp=?";
@@ -67,6 +76,11 @@
       $(".caption").text(data.quoteText);
       $(".caption").fadeIn();
       
+      var caption = $(".caption").text(); 
+      var defaultTweet = "https://twitter.com/intent/tweet?text=";
+      defaultTweet += caption;      
+      $(".twitter-tweet").attr("href", defaultTweet);
+      
       counter++;
       if (counter == 5) {
         counter = 0;
@@ -76,12 +90,27 @@
       $(".caption").fadeIn();      
     };
     
-    $("button").click(function() {
+    $("#getQuote").click(function() {
       $(".caption").fadeOut();
       $.getJSON(url, getQuote, 'jsonp');
-      
     });
+</script>
+<script>
+  window.twttr = (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0],
+      t = window.twttr || {};
+    if (d.getElementById(id)) return t;
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "https://platform.twitter.com/widgets.js";
+    fjs.parentNode.insertBefore(js, fjs);
 
-    
+    t._e = [];
+    t.ready = function(f) {
+      t._e.push(f);
+    };
+
+    return t;
+  }(document, "script", "twitter-wjs"));
 </script>
 </html>
