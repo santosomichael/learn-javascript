@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"  name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"/>
+  <title>HOPES</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
+  <link href="http://fonts.googleapis.com/css?family=Opensans:400,700" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style type="text/css">
+    body {
+      font-family: 'Pacifico', cursive;
+      transition: 2s all;
+    }
+    .caption {
+      font-family: 'Open Sans', sans-serif;
+    }
+    p {
+      font-size: 24px;
+    }
+
+    .btn:hover {
+      background-color: white;
+    }
+    .btn:active {
+      border-color: rgba(0,0,0,0);
+      outline-style: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row text-center">      
+      <h3 id="city-country"></h3>
+      <h3 id="weather"></h3>
+      <h3 id="temperature"></h3>
+      <button class='btn btn-default'>K</button>
+      <button class='btn btn-default'>C</button>      
+      <button class='btn btn-default'>R</button>
+      <button class='btn btn-default'>F</button>
+    </div>
+  </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+
+$( document ).ready(function() {
+  var x = document.getElementById("demo");
+  var temperature = 0;
+  function getLocation() {
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(showPosition);
+      } else { 
+          x.innerHTML = "Geolocation is not supported by this browser.";
+      }
+  }
+
+  function showPosition(position) {
+      var lang = position.coords.latitude;
+      var long = position.coords.longitude;
+      var url = "http://api.openweathermap.org/data/2.5/weather?lat="+lang+"&lon="+long+"&appid=bf7e9977748438e681bda15e12607060";
+            
+
+      $.getJSON(url, getData, 'json');
+  }
+
+  function getData(data) {
+    temperature = data.main.temp;
+    $("#city-country").text(data.sys.country + "," + data.name);
+    $("#weather").text(data.weather[0].description);
+    $("#temperature").text(temperature);
+  };
+
+  $("button").click(function() {
+    var input = $(this).text();
+    if (input != "Try It")
+      if (input == "K")      
+        $("#temperature").text(temperature);
+      else if (input == "C")
+        $("#temperature").text(Math.ceil(temperature - 273) + " Celcius");
+      else if (input == "F")
+        $("#temperature").text(Math.ceil((temperature - 273) / 5 * 9 + 32) + " Farenheit");
+      else if (input == "R")
+        $("#temperature").text(Math.ceil((temperature - 273) / 5 * 4) + " Reamur");
+  });
+  getLocation();
+});
+</script>
+</html>
