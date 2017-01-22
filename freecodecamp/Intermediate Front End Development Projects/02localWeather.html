@@ -4,86 +4,188 @@
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type"  name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"/>
   <title>HOPES</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
+  <!-- <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet"> -->
   <link href="http://fonts.googleapis.com/css?family=Opensans:400,700" rel="stylesheet" type="text/css">
   <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <style type="text/css">
     body {
-      font-family: 'Pacifico', cursive;
+      /*font-family: 'Pacifico', cursive;*/
+      font-family: 'Open Sans', sans-serif;
       transition: 2s all;
     }
-    .caption {
+    /*.caption {
       font-family: 'Open Sans', sans-serif;
-    }
-    p {
-      font-size: 24px;
+    }*/
+   /* span {
+      height:50px;
+      background-color: rgba(0,0,0,0.5);
+      padding: 10px;
+    }*/
+
+    body, html {
+        height: 100%;
     }
 
-    .btn:hover {
-      background-color: white;
+    .bg { 
+        /* The image used */        
+
+        /* Full height */
+        height: 100%;        
+        /* Center and scale the image nicely */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
     }
-    .btn:active {
-      border-color: rgba(0,0,0,0);
-      outline-style: none;
+    .btn-default, span {
+      background-color: rgba(255,255,255,0.5);
+      color: black;
     }
+    span {    
+      margin-bottom: 10px;
+      padding: 5px;
+    }
+
   </style>
 </head>
-<body>
+<body class='bg' style="padding:10%;">
   <div class="container-fluid">
-    <div class="row text-center">      
-      <h3 id="city-country"></h3>
-      <h3 id="weather"></h3>
-      <h3 id="temperature"></h3>
-      <button class='btn btn-default'>K</button>
-      <button class='btn btn-default'>C</button>      
-      <button class='btn btn-default'>R</button>
-      <button class='btn btn-default'>F</button>
+    <div class="row text-center">
+      <div class="col-sm-12">
+        <h1>
+          <span id="time"></span><br>
+          <button id='getLocation' class="btn btn-default" onclick="getLocation()">Get Location</button>
+        </h1>
+        <h2>
+          <span id="city-country"></span>
+        </h2>
+      </div>
+      <div class="col-sm-offset-4 col-sm-4 text-center">
+        <h3>
+          <img class='img img-responsive' id="weatherIcon" style="display: block; margin: 0 auto;" />
+          <span id="weather"></span>
+        </h3>
+      </div>
+
+      <div class="col-sm-12">
+        <br>&nbsp
+        <h3>
+          <span id="temperature"></span>          
+        </h3>
+        <button class='btn btn-default'>K</button>
+        <button class='btn btn-default'>C</button>      
+        <button class='btn btn-default'>R</button>
+        <button class='btn btn-default'>F</button>
+      </div>
     </div>
   </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript">
-
-$( document ).ready(function() {
-  var x = document.getElementById("demo");
+  
   var temperature = 0;
-  function getLocation() {
-      if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(showPosition);
-      } else { 
-          x.innerHTML = "Geolocation is not supported by this browser.";
-      }
+
+  function getLocation() {    
+    // if (navigator.geolocation) {
+    //     navigator.geolocation.getCurrentPosition(showPosition);
+    // } else { 
+    //     alert("Geolocation is not supported by this browser.");
+    // }
+    // if('geolocation' in navigator){
+    //   // geolocation is supported :)
+    //   navigator.geolocation.getCurrentPosition(showPosition, error);  
+    // }else{      
+    //   msg = "Sorry, looks like your browser doesn't support geolocation";
+    //   alert(msg);
+    // }
+    $("#getLocation").fadeOut();
+     var asd = $.getJSON("http://freegeoip.net/json/", showPosition);
+
   }
 
-  function showPosition(position) {
-      var lang = position.coords.latitude;
-      var long = position.coords.longitude;
-      var url = "http://api.openweathermap.org/data/2.5/weather?lat="+lang+"&lon="+long+"&appid=bf7e9977748438e681bda15e12607060";
-            
+  // function error(err){
+  //   // return the error message
+  //   msg = 'Error: ' + err + ' :(';
+  //   alert(msg); // output button      
+  // }  
 
+  function showPosition(position) {
+      var lang = position.latitude;      
+      var long = position.longitude;      
+      var url = "http://api.openweathermap.org/data/2.5/weather?lat="+lang+"&lon="+long+"&appid=bf7e9977748438e681bda15e12607060";
       $.getJSON(url, getData, 'json');
   }
 
   function getData(data) {
     temperature = data.main.temp;
+    var icon = data.weather[0].icon;
+    var mainWeather = data.weather[0].main;
+    var urlIcon = "http://openweathermap.org/img/w/"+icon+".png";
+
     $("#city-country").text(data.sys.country + "," + data.name);
     $("#weather").text(data.weather[0].description);
-    $("#temperature").text(temperature);
+    $("#temperature").text(Math.ceil(temperature) + "° K");
+    $("#weatherIcon").attr("src", urlIcon);
+
+    var urlBackgroundImage = ["https://media.giphy.com/media/Yy26NRbpB9lDi/giphy.gif", "https://i.ytimg.com/vi/J6-sOY_IV30/maxresdefault.jpg","http://3.bp.blogspot.com/-aHRIbGSGBhY/Vo5lRJutf7I/AAAAAAAAB1U/EnOYqVZBi8I/s1600/thunderstormn-png.png","http://img07.deviantart.net/ea88/i/2012/198/6/b/drizzle__by_niki91-d57kcpt.jpg", "https://s-media-cache-ak0.pinimg.com/736x/9d/70/9c/9d709cea2ba1350e5aebaed885f148a6.jpg", "http://www.hotel-r.net/im/hotel/gb/clear-sky-7.jpg", "https://static.pexels.com/photos/46160/field-clouds-sky-earth-46160.jpeg", "http://images.nationalgeographic.com/wpf/media-live/photos/000/475/cache/science-extreme-weather-iceland-volcano_47513_600x450.jpg"];
+
+    if (mainWeather == "Extreme") {
+      $(".bg").css("background-image", "url("+urlBackgroundImage[7]+")");
+    }
+    else if (mainWeather == "Clouds") {
+      $(".bg").css("background-image", "url("+urlBackgroundImage[6]+")");
+    }
+    else if (mainWeather == "Clear") {
+      $(".bg").css("background-image", "url("+urlBackgroundImage[5]+")");
+    }
+    else if (mainWeather == "Atmosphere") {
+      $(".bg").css("background-image", "url("+urlBackgroundImage[4]+")");
+    }
+    else if (mainWeather == "Drizzle") {
+      $(".bg").css("background-image", "url("+urlBackgroundImage[3]+")");
+    }
+    else if (mainWeather == "Thunderstorm") {
+      $(".bg").css("background-image", "url("+urlBackgroundImage[2]+")");
+    }
+    else if (mainWeather == "Snow") {
+      $(".bg").css("background-image", "url("+urlBackgroundImage[0]+")");
+    }
+    else if (mainWeather == "Rain") {
+      $(".bg").css("background-image", "url("+urlBackgroundImage[1]+")");  
+    }
   };
 
   $("button").click(function() {
     var input = $(this).text();
     if (input != "Try It")
       if (input == "K")      
-        $("#temperature").text(temperature);
+        $("#temperature").text(Math.ceil(temperature) + "° K");
       else if (input == "C")
-        $("#temperature").text(Math.ceil(temperature - 273) + " Celcius");
+        $("#temperature").text(Math.ceil(temperature - 273) + "° C");
       else if (input == "F")
-        $("#temperature").text(Math.ceil((temperature - 273) / 5 * 9 + 32) + " Farenheit");
+        $("#temperature").text(Math.ceil((temperature - 273) / 5 * 9 + 32) + "° F");
       else if (input == "R")
-        $("#temperature").text(Math.ceil((temperature - 273) / 5 * 4) + " Reamur");
+        $("#temperature").text(Math.ceil((temperature - 273) / 5 * 4) + "° R");
   });
+
+  function addZero(i) {
+    if (i < 10) {
+        i = "0" + i;
+    }
+    return i;
+  }
+
+  function myFunction() {
+    var d = new Date();
+    var h = addZero(d.getHours());
+    var m = addZero(d.getMinutes());
+    // var s = addZero(d.getSeconds());
+    // $("#time").text(h + ":" + m + ":" + s);
+    $("#time").text(h + ":" + m);
+  }
+
+$(function() {
+  myFunction();
   getLocation();
 });
 </script>
