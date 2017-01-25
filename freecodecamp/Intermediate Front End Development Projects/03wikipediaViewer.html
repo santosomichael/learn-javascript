@@ -5,45 +5,110 @@
   <title>HOPES</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
-  <link href="http://fonts.googleapis.com/css?family=Opensans:400,700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <style type="text/css">
     body {
-      font-family: 'Pacifico', cursive;
-      transition: 2s all;
-    }
-    .caption {
+      /*font-family: 'Pacifico', cursive;*/
       font-family: 'Open Sans', sans-serif;
+      transition: 2s all;
+      background-color: #046380;
+      overflow: auto;
+      right: -17px;
     }
-    p {
-      font-size: 24px;
+    .result {
+      background-color:#E6E2AF; 
+      margin-bottom: 20px;
+      padding:5px;
     }
 
-    .btn:hover {
-      background-color: white;
+    .title {
+      margin-bottom: 10px;
     }
-    .btn:active {
-      border-color: rgba(0,0,0,0);
-      outline-style: none;
+    .form-control {
+      background-color: #002F2F;
+      color: #EFECCA;
+    }
+    a, a:hover {
+      color: #046380;
+      text-decoration: none;
+    }
+
+    #loader {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      z-index: 1;
+      width: 150px;
+      height: 150px;
+      margin: -75px 0 0 -75px;
+      border: 16px solid #f3f3f3;
+      border-radius: 50%;     
+      font-size: 100px;
+    }
+    .searchbox {
+      margin-bottom: 20px;
+    }
+
+    input[type=text] {
+      text-align: center;
+      font-size: 100px;
+      border: 0px;
     }
   </style>
 </head>
 <body>
-  <div class="container-fluid">
+  <div class="container-fluid">    
     <div class="row text-center">
-      <div class='col-sm-12'>
-        <h1><i class='glyphicon glyphicon-search'></i>
-        </h1>
-        <input type="" name="" value="search">
+      <div  class="searchbox col-sm-offset-4 col-sm-4">
+        <div class="input-group input-group-sm" style="margin-top:25px;">
+          <span class="input-group-addon"><i class='glyphicon glyphicon-search'></i></span>
+          <input class='form-control' id="searchbox" type="text" autofocus="autofocus" aria-describedby="sizing-addon3" />
+          
+          <span class="input-group-btn">
+            <button class="btn btn-default">
+              <a href="https://en.wikipedia.org/wiki/Special:Random"><i class='glyphicon glyphicon-random'></i> Random</a>
+            </button>
+          </span>
+        </div>
       </div>
-    </div>
+      <div id="output" class="col-sm-offset-2 col-sm-8">
+      
+      </div>
+    </div>    
   </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript">
-  $(function() {
-    alert("billy boen");
+  function getData(data) {    
+    console.log(data);
+    var outputText = "";
+    for (var i = 0; i < 10; i++) {
+      outputText += "<a href='"+data[3][i]+"'>";
+      outputText += "<div class='result'>";
+      outputText += "<h4 class='title'>"+data[1][i]+"</h2>";
+      outputText += "<p class='content'>"+data[2][i].substring(0,100)+"...</p>";
+      outputText += "</div>";
+      outputText += "</a>";
+    }
+
+    $("#output").html(outputText);
+    $("#output").fadeIn();
+  }
+
+  var myScript = '';
+
+  $("#searchbox").keyup(function() {
+    $("#output").hide(); 
+    var input = $("#searchbox").val();
+
+    myScript = document.createElement('script');
+
+    myScript.src = 'http://en.wikipedia.org/w/api.php?action=opensearch&limit=10&format=json&callback=getData&search='+input;
+
+    document.body.appendChild(myScript);
   });
 </script>
+<!-- https://simplestepscode.com/autocomplete-data-tutorial/ -->
 </html>
