@@ -56,6 +56,27 @@
       font-size: 24px;
       background-color: #1F8A70;   
     }
+
+    .btn, .btn:hover, .btn:active, .btn:focus {
+      color: white;
+      background-color: rgba(0,0,0,0);
+      border: 0px;
+      outline: 0px;      
+    }
+
+    .glyphicon-ok {
+      color: green;
+    }
+    .glyphicon-ban-circle {
+      color: red;
+    }
+
+    .icon {
+      text-align: center;      
+      top: 20px;
+      right:10px;
+      font-size: 20px;
+    }
   </style>
 </head>
 <body>
@@ -64,25 +85,25 @@
       <div class="col-xs-offset-1 col-xs-10 col-sm-offset-4 col-sm-4" style="background-color: #BEDB39; padding-right: 0px; padding-left: 0px;">
         <div id="menu">          
           <div class="col-xs-4 menu">
-            ALL
+            <button class='btn'>ALL</button>
           </div>
           <div class="col-xs-4 menu">
-            ON
+            <button class='btn'>ON</button>
           </div>
           <div class="col-xs-4 menu">
-            OFF
+            <button class='btn'>OFF</button>
           </div>
         </div>
-        <div id="searchbox">
+        <!-- <div id="searchbox">
           <input id="search" type="text" class='form-control' placeholder="Search.." autofocus="autofocus" />
-        </div>
-        <div id="output">
+        </div> -->
+        <div id="outputall" style="margin-top: 92px;">
 
         </div>
-        <div id="output">
+        <div id="outputon" style="margin-top: 92px;">
 
         </div>
-        <div id="output">
+        <div id="outputoff" style="margin-top: 92px;"">
 
         </div>
       </div>
@@ -94,40 +115,89 @@
 <script type="text/javascript">
   
   var streamer = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "storbeck", "habathcx", "RobotCaleb", "noobs2ninjas"];
+  var outputTemp = "";
 
   function getData(data) {
     var output = "";
-    output += "<div class='contact'>";
-    output += "<div class='row'>";
-    output += "<div class='col-xs-3' style='border: 0px solid black;'>";
-    output += "<img class='profile' src='"+data.logo+"' />";
-    output += "</div>";
-    output += "<div class='col-xs-9'>";
-    output += "<span class='name'>";
-    output += data.name;
-    output += "</span>";
-    output += "<br/ >";
-    output += "<span class='description'>";
-    output += data.status.substring(0,40)+"...";
-    output += "</span>";
-    output += "</div>";
-    output += "</div>";
-    output += "</div>";
-    $("#output").append(output);
+    var outputTemp = "";    
+    output += "<a href='"+data.url+"'' target='_blank'>";
+      output += "<div class='contact'>";
+        output += "<div class='row'>";
+          output += "<div class='col-xs-3' style='border: 0px solid black;'>";
+            output += "<img class='profile' src='"+data.logo+"' />";
+          output += "</div>";
+          output += "<div class='col-xs-8'>";
+            output += "<span class='name'>";
+              output += data.display_name;              
+            output += "</span>";
+            if(data.mature === null) {  //check apakah sudah ditutup atau belum channelnya
+                output += "<label class='label label-danger' style='position:absolute;'>CLOSED</label>";    
+            }
+            output += "<br/ >";
+            output += "<span class='description "+data.display_name+"'>";
+            // output += data.status.substring(0,40)+"...";
+            output += "</span>";
+          output += "</div>";
+
+          //biar di menu on off gak ada glyphiconnya
+          outputTemp = output;
+
+          output += "<div class='col-xs-1 icon' id='"+data.display_name+"'>";
+          output += "<i class='glyphicon glyphicon-ban-circle'></i>";
+          output += "</div>";
+
+//biar di menu on off gak ada glyphiconnya          
+outputTemp += "</div>";
+outputTemp += "</div>";
+outputTemp += "</a>";
+
+        output += "</div>";
+      output += "</div>";
+    output += "</a>";
+    $("#outputall").append(output);
+
+    var url = "https://wind-bow.gomix.me/twitch-api/streams/"+data.display_name;
+    $.get( url, function( data ) {
+      if(data.stream) {        
+        $("#outputon").append(outputTemp);
+
+        //memasukkan tanda bahwa channelnya lagi streaming
+        $("#"+data.stream.channel.display_name).html("<i class='glyphicon glyphicon-ok'></i>");
+
+        //memasukkan status kalau channelnya lagi streaming
+        $("."+data.stream.channel.display_name).html(data.stream.channel.status.substring(0,40)+"...");
+      } else $("#outputoff").append(outputTemp);
+    });
   }
 
+  $("#outputon").hide();
+  $("#outputoff").hide();
   $(function() {
-    streamer.map(function(item) {
+    streamer.map(function(item) {      
       var url = "https://wind-bow.gomix.me/twitch-api/channels/"+item;
-      $.getJSON(url,getData);      
-      output = "asd";
+      $.getJSON(url,getData);
     });
-    $("#search").keyup(function() {      
-      $("#output").hide();
+    $("#search").keyup(function() {
+      $("#outputall").hide();
       $("#search").val();
-      $("#output").fadeIn();
+      $("#outputall").fadeIn();
     });
   });
+
+  $(".btn").click(function () {
+    $("#outputoff").hide();
+    $("#outputon").hide();
+    $("#outputall").hide();
+    $("#searchbox").hide();
+    if ($(this).text() == "ON") {
+      $("#outputon").show();  
+    } else if ($(this).text() == "OFF") {
+      $("#outputoff").show();
+    } else {
+      $("#outputall").show();
+      $("#searchbox").show();
+    } 
+  });  
 
 </script>
 </html>
