@@ -8,13 +8,83 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <style type="text/css">
+    body {      
+      font-family: 'Open Sans', sans-serif;
+      background-color: #004358;
+    }
+    .name {
+      font-family: 'Pacifico', cursive;
+    }
+    .profile {
+      width: 60px;
+      height: 60px;
+      background-color: black;
+      border: 0px; 
+      border-radius: 100px;
+    }    
+
+    .name {
+      color: white;      
+      font-size: 24px;
+    }
+    .description {
+      color: white;
+      font-size: 14px;
+    }
+
+    .contact {
+      padding: 10px;
+      background-color: #FD7400;      
+      margin-top: 5px;
+      transition: 0.5s all;
+    }
+
+    .contact:hover {
+      color: black;
+      background-color: #FFE11A;
+    }
+
+    #searchbox {
+      background-color: #1F8A70;
+      height: 100px;
+      margin-top: 10px;
+    }
+    .menu {
+      text-align: center;
+      padding: 25px;
+      color: white;
+      font-size: 24px;
+      background-color: #1F8A70;   
+    }
   </style>
 </head>
 <body>
   <div class="container-fluid">    
-    <div class="row text-center">
-      <div id="output">
-        <h2 id='logo'></h2>
+    <div class="row">
+      <div class="col-xs-offset-1 col-xs-10 col-sm-offset-4 col-sm-4" style="background-color: #BEDB39; padding-right: 0px; padding-left: 0px;">
+        <div id="menu">          
+          <div class="col-xs-4 menu">
+            ALL
+          </div>
+          <div class="col-xs-4 menu">
+            ON
+          </div>
+          <div class="col-xs-4 menu">
+            OFF
+          </div>
+        </div>
+        <div id="searchbox">
+          <input id="search" type="text" class='form-control' placeholder="Search.." autofocus="autofocus" />
+        </div>
+        <div id="output">
+
+        </div>
+        <div id="output">
+
+        </div>
+        <div id="output">
+
+        </div>
       </div>
     </div>    
   </div>
@@ -23,18 +93,28 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript">
   
-  // var streamer = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "storbeck", "habathcx", "RobotCaleb", "noobs2ninjas"];  
-  var streamer = ["ESL_SC2", "OgamingSC2"];  
-    
-  
+  var streamer = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "storbeck", "habathcx", "RobotCaleb", "noobs2ninjas"];
 
   function getData(data) {
     var output = "";
-    output = "<h2>"+data.status+"</h2>";
-    $("#logo").append(output);
-
+    output += "<div class='contact'>";
+    output += "<div class='row'>";
+    output += "<div class='col-xs-3' style='border: 0px solid black;'>";
+    output += "<img class='profile' src='"+data.logo+"' />";
+    output += "</div>";
+    output += "<div class='col-xs-9'>";
+    output += "<span class='name'>";
+    output += data.name;
+    output += "</span>";
+    output += "<br/ >";
+    output += "<span class='description'>";
+    output += data.status.substring(0,40)+"...";
+    output += "</span>";
+    output += "</div>";
+    output += "</div>";
+    output += "</div>";
+    $("#output").append(output);
   }
-
 
   $(function() {
     streamer.map(function(item) {
@@ -42,6 +122,12 @@
       $.getJSON(url,getData);      
       output = "asd";
     });
+    $("#search").keyup(function() {      
+      $("#output").hide();
+      $("#search").val();
+      $("#output").fadeIn();
+    });
   });
+
 </script>
 </html>
