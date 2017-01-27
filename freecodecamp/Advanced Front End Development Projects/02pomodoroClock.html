@@ -11,15 +11,105 @@
   </style>
 </head>
 <body>
-  <div class="container-fluid">    
+  <div class="container-fluid">
     <div class="row">
-      
-    </div>    
+      <div class="col-sm-offset-4 col-sm-4 text-center">
+        <h2>Podomoro</h2>
+        <div class="col-sm-6">
+          <h3>Break Length</h3>
+          <div class="col-sm-4">
+            <button class="btn btn-default breakmin">-</button>
+          </div>
+          <div class="col-sm-4 breaktime">
+            5
+          </div>
+          <div class="col-sm-4">
+            <button class="btn btn-default breakplus">+</button>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <h3>Session Length</h3>
+          <div class="col-sm-4">
+            <button class="btn btn-default sessionmin">-</button>
+          </div>
+          <div class="col-sm-4 sessiontime">
+            30
+          </div>
+          <div class="col-sm-4">
+            <button class="btn btn-default sessionplus">+</button>
+          </div>
+        </div>        
+        <button class="btn btn-default startsession">START SESSION</button>
+        <div class="session">0</div>
+      </div>
+    </div>
   </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript">
-   
+  var sessiontime;
+  var recount;
+  var counting = false;
+
+  var start = false;
+
+  function setVal(number, state) {
+    var val = parseInt($("."+state).text()) + number;
+    counting = false;
+    if (val > 0)
+      $("."+state).text(val);
+    clearInterval(recount);
+    start = false;
+    counting = false;
+  }
+
+  //function mengurangi waktu yang di label break
+  $(".breakmin").click(function() {
+    setVal(-1, "breaktime");  
+  });
+
+  //function menambah waktu yang di label break
+  $(".breakplus").click(function() {
+    setVal(1, "breaktime");
+  });
+
+  //function menambah waktu yang di label session
+  $(".sessionplus").click(function() {
+    setVal(1, "sessiontime");
+  });
+
+  //function mengurangi waktu yang di label session
+  $(".sessionmin").click(function() {
+    setVal(-1, "sessiontime");  
+  });
+
+  $(".startsession").click(function() {
+    start = !start;
+
+    if (!start) {
+      clearInterval(recount);
+      counting = true;
+      lastCount = sessionTime;
+    }
+
+    if (start) {
+      if (!counting) {
+        sessionTime = parseInt($(".sessiontime").text());
+        counting = false;
+      }
+      else sessionTime = lastCount;
+
+      $(".session").text(sessionTime);
+      sessionTime--;      
+      recount = setInterval(sessionrunning, 1000);
+    }
+  });
+
+  function sessionrunning() {
+    $(".session").text(sessionTime);
+    if (sessionTime > 0)
+      sessionTime--;
+  };
 </script>
 </html>
