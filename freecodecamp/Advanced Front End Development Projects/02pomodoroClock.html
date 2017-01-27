@@ -14,7 +14,8 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-offset-4 col-sm-4 text-center">
-        <h2>Podomoro</h2>
+        <h1>Podomoro</h1>
+        <h2 id='status'></h2>
         <div class="col-sm-6">
           <h3>Break Length</h3>
           <div class="col-sm-4">
@@ -33,7 +34,7 @@
             <button class="btn btn-default sessionmin">-</button>
           </div>
           <div class="col-sm-4 sessiontime">
-            30
+            5
           </div>
           <div class="col-sm-4">
             <button class="btn btn-default sessionplus">+</button>
@@ -51,7 +52,7 @@
   var sessiontime;
   var recount;
   var counting = false;
-
+  var status = "work";
   var start = false;
 
   function setVal(number, state) {
@@ -62,6 +63,7 @@
     clearInterval(recount);
     start = false;
     counting = false;
+    status = "work";
   }
 
   //function mengurangi waktu yang di label break
@@ -98,12 +100,12 @@
 
     if (start) {
       if (!counting) {  //if previously not paused then continue from the start set sessiontime
-        sessionTime = parseInt($(".sessiontime").text());
+        sessionTime = parseInt($(".sessiontime").text())*60;
         counting = false;
       }
       else sessionTime = lastCount; //resume from before
 
-      $(".session").text(sessionTime);
+      $(".session").text(Math.floor(sessionTime/60) + ":" + sessionTime%60);
       sessionTime--;      
       recount = setInterval(sessionrunning, 1000);
     }
@@ -111,9 +113,22 @@
 
   //time is decreasing
   function sessionrunning() {
-    $(".session").text(sessionTime);
+    $(".session").text(Math.floor(sessionTime/60) + ":" + sessionTime%60);
+    if (status == "work")
+      $("#status").text("Work Time");
+    else $("#status").text("Break Time");
+
     if (sessionTime > 0)
       sessionTime--;
-  };
+    else if (status == "work") {      
+      sessionTime = parseInt($(".breaktime").text())*60;
+      status = "break";
+    }
+    else {
+      $("#status").text("Work Time");
+      sessionTime = parseInt($(".sessiontime").text())*60;
+      status = "work";
+    }
+  };  
 </script>
 </html>
