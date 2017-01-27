@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- http://www.cssscript.com/pure-css-circular-percentage-bar/ -->
   <link rel="stylesheet" href="css/circle.css">
   <style type="text/css">
     body {
@@ -13,7 +14,7 @@
       background-color: white;
       font-family: 'Orbitron', sans-serif;
     }
-    #outerCircle, #innerCircle {
+    /*#outerCircle, #innerCircle {
       position: absolute;      
     } 
     #outerCircle {
@@ -54,21 +55,36 @@
       margin-left: 7.5%;      
       border-radius: 100%;
       border: 1px solid;
-      /*background-image:
+      
+      background-image:
       linear-gradient(15deg, black 10%, transparent 100%),
       linear-gradient(90deg, white 50%, transparent 50%),
-      linear-gradient(-90deg, #6EC7FE 50%, transparent 50%);*/      
+      linear-gradient(-90deg, #6EC7FE 50%, transparent 50%); 
+
       border-right: 60px solid transparent;
       border-top: 60px solid red;
       border-left: 60px solid red;
       border-bottom: 60px solid red;
       
+    }*/    
+    #outerCircle {
+      background-color: #44444C;
+      margin-right: auto;
+      margin-left: auto;
     }
-    .time {
-      display: absolute;
+    .time {      
       font-size: 20px;
       color: #757473;
     }
+    .slice {
+      transform: rotate(225deg);
+    }
+    #circle {      
+      background-color: #44444C;
+    }
+    .c100:after {
+      background-color: #232428; 
+    }    
   </style>
 </head>
 <body>
@@ -76,7 +92,7 @@
     <div class="row">
       <div class="col-xs-12 col-sm-offset-4 col-sm-4 text-center">
         <h1>Podomoro</h1>
-        <h2 id='status'></h2>
+        <h2 id='status'>-</h2>
         <div class="col-sm-6">
           <h3>Break Length</h3>
           <div class="col-sm-4">
@@ -95,7 +111,7 @@
             <button class="btn btn-default sessionmin">-</button>
           </div>
           <div class="col-sm-4 sessiontime">
-            5
+            3
           </div>
           <div class="col-sm-4">
             <button class="btn btn-default sessionplus">+</button>
@@ -103,12 +119,14 @@
         </div>        
         <button class="btn btn-default startsession">START SESSION</button>
         
-        <div class="c100 p10 big">
-            <span>50%</span>
-            <div class="slice">
-                <div class="bar"></div>
-                <div class="fill"></div>
-            </div>
+        <div id = "outerCircle">
+          <div id = "circle" class="c100 big">
+              <span class ='time'>00:00</span>
+              <div class="slice">
+                  <div class="bar"></div>
+                  <div class="fill"></div>
+              </div>
+          </div>
         </div>
           <!-- <div id="outerCircle">
           </div>
@@ -123,18 +141,34 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript">
-  var sessiontime;
+  var timeout = 100;
+  var sessionTime;
   var recount;
   var counting = false;
   var status = "work";
   var start = false;
+    
+  var percentage = 0;
+  function change() {
+    $("#circle").removeClass("p"+percentage);
+    if (status == "work") {
+      percentage = 75 - Math.floor((sessionTime / ($(".sessiontime").text()*60))*75)
+    }
+    else if (status == "break")
+      percentage = 100 - Math.floor((sessionTime / ($(".breaktime").text()*60))*100);
+    $("#circle").addClass("p"+percentage);
+    $("#circle").removeClass("p100");
+  }
 
   function setVal(number, state) {
     var val = parseInt($("."+state).text()) + number;
     counting = false;
     if (val > 0)
       $("."+state).text(val);
-    clearInterval(recount);
+
+    clearInterval(flow);
+    clearInterval(recount);    
+
     start = false;
     counting = false;
     status = "work";
@@ -168,6 +202,7 @@
     //if it is starting already, but button clicked again (state start to false), then it will pause
     if (!start) {
       clearInterval(recount); //reset the counter
+      clearInterval(flow);
       counting = true;  //set state that the counting is running
       lastCount = sessionTime;  //save the last stopped time to resume the countdown later
     }
@@ -180,7 +215,8 @@
       else sessionTime = lastCount; //resume from before
       
       sessionrunning();      
-      recount = setInterval(sessionrunning, 1000);
+      recount = setInterval(sessionrunning, timeout);
+      flow = setInterval(change,timeout);
     }
   });
 
