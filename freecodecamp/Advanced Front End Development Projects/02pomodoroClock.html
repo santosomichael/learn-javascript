@@ -84,21 +84,24 @@
     setVal(-1, "sessiontime");  
   });
 
+  //start the countdown
   $(".startsession").click(function() {
+    //set the start state to true or false, because it's starting
     start = !start;
 
+    //if it is starting already, but button clicked again (state start to false), then it will pause
     if (!start) {
-      clearInterval(recount);
-      counting = true;
-      lastCount = sessionTime;
+      clearInterval(recount); //reset the counter
+      counting = true;  //set state that the counting is running
+      lastCount = sessionTime;  //save the last stopped time to resume the countdown later
     }
 
     if (start) {
-      if (!counting) {
+      if (!counting) {  //if previously not paused then continue from the start set sessiontime
         sessionTime = parseInt($(".sessiontime").text());
         counting = false;
       }
-      else sessionTime = lastCount;
+      else sessionTime = lastCount; //resume from before
 
       $(".session").text(sessionTime);
       sessionTime--;      
@@ -106,6 +109,7 @@
     }
   });
 
+  //time is decreasing
   function sessionrunning() {
     $(".session").text(sessionTime);
     if (sessionTime > 0)
