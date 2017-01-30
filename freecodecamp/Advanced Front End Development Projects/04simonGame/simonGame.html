@@ -26,19 +26,19 @@
         <div class="col-xs-12 col-sm-offset-4 col-sm-4">
           <h2>Score : <span id="level">0</span></h2>          
           <div class="col-xs-6">
-            <button class='btn btn-default sound1' style="background-color: #F73E3F; color:rgba(0,0,0,0);">Sound 1</button>
+            <button class='btn btn-default sound1' style="background-color: #F15A5A; color:rgba(0,0,0,0);">Sound 1</button>
           </div>
           <div class="col-xs-6">
-            <button class='btn btn-default sound2' style="background-color: #3AD33A; color:rgba(0,0,0,0);">Sound 2</button>
+            <button class='btn btn-default sound2' style="background-color: #4EBA6F; color:rgba(0,0,0,0);">Sound 2</button>
           </div>
           <div class="col-xs-6">
-            <button class='btn btn-default sound3' style="background-color: #FFF33B; color:rgba(0,0,0,0);">Sound 3</button>
+            <button class='btn btn-default sound3' style="background-color: #F0C419; color:rgba(0,0,0,0);">Sound 3</button>
           </div>
           <div class="col-xs-6">
-            <button class='btn btn-default sound4' style="background-color: #40D8FF; color:rgba(0,0,0,0);">Sound 4</button>
+            <button class='btn btn-default sound4' style="background-color: #2D95BF; color:rgba(0,0,0,0);">Sound 4</button>
           </div>
           <div class="col-sm-12 text-right">
-            <button class='btn btn-warning btn-play'>Start</button>
+            <button class='btn btn-default btn-play' style="background-color: #955BA5; color:white;">Start</button>
           </div>
         </div>
       </div>
@@ -121,7 +121,7 @@
     }
 
     function turnOnButton(input) {      
-      var backgroundColor = ["#F73E3f", "#3AD33A", "#FFF33B", "#40D8FF"];      
+      var backgroundColor = ["#F15A5A", "#4EBA6F", "#F0C419", "#2D95BF"];      
 
       setTimeout(function() {
         $(".sound"+input).css("background-color", "white");
