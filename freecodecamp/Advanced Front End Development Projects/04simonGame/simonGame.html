@@ -39,14 +39,20 @@
           </div>
           <div class="col-sm-12 text-right">
             <button class='btn btn-default btn-play' style="background-color: #955BA5; color:white;">Start</button>
+            <button class='btn btn-default btn-strict' style="background-color: red; color:white;">Strict (off)</button>
           </div>
         </div>
       </div>
 
-      <audio id="audio1" src="simonSound1.mp3" ></audio>
+      <!-- <audio id="audio1" src="simonSound1.mp3" ></audio>
       <audio id="audio2" src="simonSound2.mp3" ></audio>
       <audio id="audio3" src="simonSound3.mp3" ></audio>
-      <audio id="audio4" src="simonSound4.mp3" ></audio>
+      <audio id="audio4" src="simonSound4.mp3" ></audio> -->
+
+      <audio id="audio1" src="https://s3.amazonaws.com/freecodecamp/simonSound1.mp3" ></audio>
+      <audio id="audio2" src="https://s3.amazonaws.com/freecodecamp/simonSound2.mp3" ></audio>
+      <audio id="audio3" src="https://s3.amazonaws.com/freecodecamp/simonSound3.mp3" ></audio>
+      <audio id="audio4" src="https://s3.amazonaws.com/freecodecamp/simonSound4.mp3" ></audio>
 </body> 
 </html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -55,6 +61,7 @@
     var audio;
     var question = [];
     var winnerCounter = 0;    
+    var strict = false;
 
     function getRandom() {
       return Math.ceil(Math.random()*4);
@@ -106,7 +113,6 @@
       }
       //
       
-      
       question.push(random);
       var counter = 0;
       question.map(function(item) {
@@ -118,6 +124,12 @@
       });
       $("#level").text(question.length-1);
       $(".btn-play").text("Reset");
+
+      if (question.length == 21) {
+        resetGame();
+        $("#level").text("YOU WIN!! 20 STEPS");
+        $(".btn-play").text("Start");
+      }
     }
 
     function turnOnButton(input) {      
@@ -135,7 +147,14 @@
     $(".btn").on("click", function() {
       // $("#level").text("");
       var input = $(this).text();
-      if (input == "Reset") {
+      
+      if (input == "Strict (off)") {
+        strict = true;
+        $(".btn-strict").text("Strict (on)");        
+      } else if (input == "Strict (on)") {
+        strict = false;
+        $(".btn-strict").text("Strict (off)");
+      } else if (input == "Reset") {
         resetGame();
       } else if (input == "Start") {
         nextGame();        
@@ -143,8 +162,10 @@
         numberButtonClicked = input.slice(input.length-1, input.length);        
         turnOnButton(numberButtonClicked);
         if (numberButtonClicked != question[winnerCounter]) {
-          resetGame();
-          $(".btn-play").text("Start");
+          if (strict) {
+            resetGame();
+            $(".btn-play").text("Start");
+          }
         }
         else {
           winnerCounter++;
@@ -153,7 +174,6 @@
               nextGame();  
             },800);
           }
-
         }
       }
     });
