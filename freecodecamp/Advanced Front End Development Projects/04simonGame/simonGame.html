@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,31 +5,61 @@
 	<title>HOPES</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
+  <style type="text/css">
+    .btn {
+      transition: 0.25s all;
+    }
+    .sound1, .sound2, .sound3, .sound4 {
+      width: 150px;
+      height: 150px;
+      margin-bottom:25px;      
+    }
 
+    .btn-default, .btn-default:hover, .btn-default:active, .btn-default:focus {
+      border: 0px;
+      outline: 0px;      
+    }
+  </style>
 </head>
 <body class="container">
       <div class="row">
-        <h2>Level <span id="level">1</span></h2>        
-        <div class="col-sm-12"><button class='btn btn-warning'>Start</button></div>
-        <div class="col-sm-6"><button class='btn btn-default'>Sound 1</button></div>
-        <div class="col-sm-6"><button class='btn btn-default'>Sound 2</button></div>
-        <div class="col-sm-6"><button class='btn btn-default'>Sound 3</button></div>
-        <div class="col-sm-6"><button class='btn btn-default'>Sound 4</button></div>
-        <audio id="audio1" src="simonSound1.mp3" ></audio>
-        <audio id="audio2" src="simonSound2.mp3" ></audio>
-        <audio id="audio3" src="simonSound3.mp3" ></audio>
-        <audio id="audio4" src="simonSound4.mp3" ></audio>
+        <div class="col-xs-12 col-sm-offset-4 col-sm-4">
+          <h2>Score : <span id="level">0</span></h2>          
+          <div class="col-xs-6">
+            <button class='btn btn-default sound1' style="background-color: #F73E3F; color:rgba(0,0,0,0);">Sound 1</button>
+          </div>
+          <div class="col-xs-6">
+            <button class='btn btn-default sound2' style="background-color: #3AD33A; color:rgba(0,0,0,0);">Sound 2</button>
+          </div>
+          <div class="col-xs-6">
+            <button class='btn btn-default sound3' style="background-color: #FFF33B; color:rgba(0,0,0,0);">Sound 3</button>
+          </div>
+          <div class="col-xs-6">
+            <button class='btn btn-default sound4' style="background-color: #40D8FF; color:rgba(0,0,0,0);">Sound 4</button>
+          </div>
+          <div class="col-sm-12 text-right">
+            <button class='btn btn-warning btn-play'>Start</button>
+          </div>
+        </div>
       </div>
+
+      <audio id="audio1" src="simonSound1.mp3" ></audio>
+      <audio id="audio2" src="simonSound2.mp3" ></audio>
+      <audio id="audio3" src="simonSound3.mp3" ></audio>
+      <audio id="audio4" src="simonSound4.mp3" ></audio>
 </body> 
+</html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script>  
     var audio;
     var question = [];
+    var winnerCounter = 0;    
+
     function getRandom() {
       return Math.ceil(Math.random()*4);
     };
-
+    
     //get selected sound audio
     function getRadio(audio) {
       if (audio == 1) {
@@ -48,28 +77,84 @@
       audio.play();
     };
 
+    function resetGame() {
+      winnerCounter = 0;
+      $("#level").text("Game Over");
+      question = [];
+      $(".btn-play").text("Start");
+    }
+
+    function nextGame() {
+      winnerCounter = 0;
+      
+      var random = getRandom();
+
+      //mode every turn random
+      // question = question.map(function(item, i) {
+      //   var random = getRandom();
+      //   while (random == question[i]) {
+      //     random = getRandom();
+      //   }
+      //   return random;
+      // });
+      //
+
+      //mode normal
+      var random = getRandom();
+      while (random == question[question.length-1]) {
+        random = getRandom();
+      }
+      //
+      
+      
+      question.push(random);
+      var counter = 0;
+      question.map(function(item) {
+        setTimeout(function() {
+          getRadio(item);
+          turnOnButton(item);
+        },counter);
+        counter += 500;
+      });
+      $("#level").text(question.length);
+      $(".btn-play").text("Reset");
+    }
+
+    function turnOnButton(input) {      
+      var backgroundColor = ["#F73E3f", "#3AD33A", "#FFF33B", "#40D8FF"];      
+
+      setTimeout(function() {
+        $(".sound"+input).css("background-color", "white");
+      },0);
+      setTimeout(function() {
+        $(".sound"+input).css("background-color", backgroundColor[input-1]);
+      },250);
+      getRadio(input);
+    }
+
     $(".btn").on("click", function() {
       // $("#level").text("");
       var input = $(this).text();
-      if (input == "Start") {
-        var random = getRandom();
-        getRadio(random);
-        question.push(random);
-      }
-      else if (input == "Sound 1") {
-        getRadio(1);
-      }
-      else if (input == "Sound 2") {
-        getRadio(2);
-      }
-      else if (input == "Sound 3") {
-        getRadio(3);
-      }
-      else if (input == "Sound 4") {
-        getRadio(4);
+      if (input == "Reset") {
+        resetGame();
+      } else if (input == "Start") {
+        nextGame();        
+      } else {
+        numberButtonClicked = input.slice(input.length-1, input.length);        
+        turnOnButton(numberButtonClicked);
+        if (numberButtonClicked != question[winnerCounter]) {
+          resetGame();
+          $(".btn-play").text("Start");
+        }
+        else {
+          winnerCounter++;
+          if (winnerCounter == question.length) {
+            setTimeout(function() {
+              nextGame();  
+            },800);
+          }
+
+        }
       }
     });
-    // audio.play();
-    //           }
-   </script>
-</html>
+</script>      
