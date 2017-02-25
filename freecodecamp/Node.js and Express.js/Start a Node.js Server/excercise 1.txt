@@ -1,0 +1,8 @@
+//node program.js 1 2 3, counting number from argument, sum = 6
+var number = process.argv;
+var sum = 0;
+var length = process.argv.length;
+for (var i = 2; i<length; i++) {
+        sum += Number(process.argv[i]);
+}
+console.log(sum);
