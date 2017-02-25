@@ -1,0 +1,7 @@
+//node program.js, reading a file and counting it's new line/enter ('\n')
+var fs = require('fs');
+var buf = fs.readFileSync(process.argv[2]);
+var strings = buf.toString();
+strings = strings.split('\n');
+var stringsLength = strings.length-1;
+console.log(stringsLength);
