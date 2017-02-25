@@ -1,0 +1,13 @@
+//node program.js, reading a file and counting it's new line/enter ('\n') using asynchronous and call back
+var fs = require('fs');
+fs.readFile(process.argv[2], function (err, buf) {
+	if (err) {
+		return console.log(err);
+	} else {
+		var strings = buf.toString();
+		strings = strings.split('\n');
+		var stringsLength = strings.length-1;
+		console.log(stringsLength);
+	}
+});
+
