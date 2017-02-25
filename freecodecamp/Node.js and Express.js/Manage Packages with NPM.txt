@@ -1,0 +1,41 @@
+npm whoami
+
+1. dev environment
+mkdir node
+npm init
+
+2. login
+npm adduser
+npm whoami
+
+3. start a project
+npm init --scope=<username>
+npm init --scope=michaelsan17
+git init
+
+4. install package
+npm install @linclark/pkg
+
+5. listing dependencies
+npm ls
+
+6.npm test
+touch test.js
+
+7.
+npm install
+touch README.md
+npm init
+
+8. publish project biar bisa diakses orang
+npm publish
+npm view @michaelsan17/node
+
+9. setting version
+npm help version
+vi package.json
+
+10. dist tag
+npm dist-tag add @michaelsan17/pkg@1.0.1 beta
+
+how-to-npm verify
