@@ -1,0 +1,36 @@
+//node program.js, reading a file on directory show file with txt extension
+var fs = require('fs');
+var file = process.argv[2];		//file path
+var ext = process.argv[3];		//extension required
+var extLength = ext.length;		//extention length
+fs.readdir(process.argv[2], function (err, buf) {
+        if (err) {
+                return console.log(err);
+        } else {
+                var strings = buf.toString().split(',');
+                //for testing the extension split
+                // var front =  strings[0].length-3;
+                // var last = strings[0].length;
+                // console.log(strings[0].substr(front,last));
+                //console.log(strings);
+
+                //get all filtered item
+                strings = strings.map(function(item) {
+                        var itemLength = item.length;
+                        if (item.substr(itemLength - extLength, itemLength) == ext && itemLength > extLength)
+                                return item;
+                        return false;
+                });
+
+                //delete all unnecessary item
+                strings = strings.filter(function (item) {
+                        return item != false;
+                });
+
+                //print all chosen item
+                strings.forEach(function(item) {
+                        console.log(item);
+                });
+                //console.log(strings);
+        }
+})
